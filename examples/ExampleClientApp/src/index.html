@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>JobSight</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+  <style>
+    :root {
+      --mouse-x: 0px;
+      --mouse-y: 0px;
+      --scale: 1;
+    }
+
+    @keyframes slowZoom {
+      0% {
+        --scale: 1;
+      }
+      50% {
+        --scale: 1.1;
+      }
+      100% {
+        --scale: 1;
+      }
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      color: white;
+      position: relative;
+      min-height: 100vh;
+      overflow-x: hidden;  /* Prevent horizontal scroll */
+      overflow-y: auto;    /* Allow vertical scroll */
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('/assets/images/green-background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      z-index: -2;
+      will-change: transform;
+      transition: transform 10s ease-out;
+      transform: translate(var(--mouse-x), var(--mouse-y)) scale(var(--scale));
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+    .mat-mdc-card {
+      background: rgba(255, 255, 255, 0.9);
+      color: rgba(0, 0, 0, 0.87);
+    }
+
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const strength = 20; // Increased strength for more noticeable effect
+      const root = document.documentElement;
+
+      document.addEventListener('mousemove', function(e) {
+        const xPos = (e.clientX / window.innerWidth - 0.5) * strength;
+        const yPos = (e.clientY / window.innerHeight - 0.5) * strength;
+
+        root.style.setProperty('--mouse-x', `${xPos}px`);
+        root.style.setProperty('--mouse-y', `${yPos}px`);
+      });
+
+      // Start the zoom animation
+      setInterval(() => {
+        const currentScale = parseFloat(getComputedStyle(root).getPropertyValue('--scale')) || 1;
+        const newScale = currentScale === 1 ? 1.1 : 1;
+        root.style.setProperty('--scale', newScale);
+      }, 15000); // 15 seconds for each zoom state
+    });
+  </script>
+</head>
+<body class="mat-typography">
+  <app-root></app-root>
+</body>
+</html>
+

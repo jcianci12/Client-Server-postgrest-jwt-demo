@@ -1,0 +1,46 @@
+<!-- Main navigation bar -->
+<mat-toolbar>
+  <a mat-button routerLink="/home">
+    <span>{{appTitle}}</span>
+  </a>
+
+  <!-- Main navigation -->
+  <ng-container *ngIf="isAuthenticated$ | async">
+    <a mat-button routerLink="/companies" routerLinkActive="active">
+      <mat-icon>business</mat-icon>
+      <span class="nav-label">Companies</span>
+    </a>
+    <a mat-button routerLink="/jobsites" routerLinkActive="active">
+      <mat-icon>location_on</mat-icon>
+      <span class="nav-label">Jobsites</span>
+    </a>
+  </ng-container>
+
+  <span class="spacer"></span>
+
+  <!-- Company name if available -->
+  <span *ngIf="(currentCompany$ | async) as company" class="company-name">
+    {{company.name}}
+  </span>
+
+  <!-- User menu -->
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <span style="font-size: 24px;">👤</span>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Logout</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
+
+<!-- Main content wrapper -->
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+<!-- Jobsite navigation -->
+<app-jobsite-nav *ngIf="currentJobsiteId" [jobsiteId]="currentJobsiteId"></app-jobsite-nav>
+
+

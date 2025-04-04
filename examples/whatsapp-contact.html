@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Part Seller</title>
+    <style>
+        .contact-button {
+            display: block;
+            background-color: #0084ff;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 20px;
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            text-align: center;
+            max-width: 300px;
+        }
+        .whatsapp {
+            background-color: #25D366;
+        }
+        .email {
+            background-color: #EA4335;
+        }
+        .contact-button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Contact Seller</h1>
+    
+    <!-- WhatsApp example with pre-filled message -->
+    <a href="https://wa.me/61421453444?text=Hi%2C%20I%27m%20interested%20in%20your%20part%20listing" class="contact-button whatsapp">
+        Message on WhatsApp
+    </a>
+    
+    <p>To create your WhatsApp link:</p>
+    <ol>
+        <li>Take your phone number (e.g., +1 234-567-8900)</li>
+        <li>Remove all special characters</li>
+        <li>Add country code (e.g., 11234567890 for US)</li>
+        <li>Use format: https://wa.me/YOURNUMBER</li>
+    </ol>
+    
+    <!-- Email example (email would be dynamic) -->
+    <a href="mailto:seller@example.com" class="contact-button email">
+        Send Email
+    </a>
+    
+    <!-- In-app messaging example -->
+    <a href="#" class="contact-button" onclick="alert('This would open your in-app messaging system')">
+        Message in App
+    </a>
+    
+    <p>Note: Replace phone number and email with actual user contact details</p>
+</body>
+</html> 

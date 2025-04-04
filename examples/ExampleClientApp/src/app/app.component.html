@@ -1,0 +1,40 @@
+<style>
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 2em;
+  }
+
+  app-navbar {
+    flex: 0 0 auto;
+  }
+
+  .footer-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100vh;
+  }
+</style>
+
+<div class="app-container">
+  <app-navbar></app-navbar>
+  <app-status></app-status>
+  <router-outlet></router-outlet>
+  <div class="footer-container">
+    <footer class="footer">
+      <!-- Session expired notification -->
+      <mat-card class="colourfulbackground mat-elevation-z2 mat-card-alert"
+        [@openClose]="user?.expired ? 'open' : 'closed'">
+        <mat-card-content>
+          <div>
+            <p>Your session has expired.
+              <button mat-button (click)="login()">Renew Session</button>
+            </p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </footer>
+  </div>
+</div>

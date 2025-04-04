@@ -1,0 +1,196 @@
+.navbar-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+  white-space: nowrap;
+
+  &::-webkit-scrollbar {
+    height: 2px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
+}
+
+:host {
+  height: 64px;
+  display: block;
+
+  // Add padding to account for the bottom navigation
+  ::ng-deep main {
+    padding-bottom: 72px;
+  }
+}
+
+.selected {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+mat-divider {
+  margin: 8px 0;
+}
+
+:host ::ng-deep .mat-mdc-menu-item.mat-mdc-menu-item-disabled {
+  opacity: 0.5;
+}
+
+[mat-button] {
+  color: rgba(0, 0, 0, 0.87);
+  white-space: nowrap;
+
+  mat-icon {
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  @media (max-width: 600px) {
+    min-width: 48px;
+    padding: 0 8px;
+
+    span:not(.mat-icon) {
+      display: none;
+    }
+
+    mat-icon {
+      margin: 0;
+    }
+  }
+}
+
+// Jobsite Navigation Styles
+nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 8px 16px;
+  overflow-x: auto;
+  white-space: nowrap;
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 600px) {
+    padding: 8px;
+  }
+
+  &::-webkit-scrollbar {
+    height: 2px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
+
+  a {
+    margin: 0 8px;
+    color: rgba(0, 0, 0, 0.6);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+
+    @media (max-width: 600px) {
+      min-width: 48px;
+      margin: 0 4px;
+      justify-content: center;
+
+      .nav-label {
+        display: none;
+      }
+
+      .nav-icon {
+        margin: 0;
+      }
+    }
+
+    &.selected {
+      color: #1976d2;
+      border-bottom: 2px solid #1976d2;
+    }
+
+    .nav-icon {
+      margin-right: 4px;
+    }
+  }
+}
+
+.nav-icon {
+  margin-right: 8px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.company-name {
+  margin-right: 16px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #95bed169;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+
+  a[mat-button] {
+    color: white;
+    margin: 0 4px;
+
+    .mat-icon {
+      margin-right: 4px;
+    }
+
+    &.active {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+// Responsive styles
+@media (max-width: 600px) {
+  .company-name {
+    font-size: 12px;
+    margin-right: 8px;
+  }
+
+  mat-toolbar {
+    padding: 0 8px;
+
+    a[mat-button] {
+      min-width: 40px;
+      padding: 0 8px;
+
+      .nav-label {
+        display: none;
+      }
+
+      .mat-icon {
+        margin: 0;
+      }
+    }
+  }
+}

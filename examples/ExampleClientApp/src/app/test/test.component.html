@@ -1,0 +1,163 @@
+<div class="test-container">
+  <h1>Test Page</h1>
+
+  <mat-card class="test-card">
+    <mat-card-header>
+      <mat-card-title>QR Code Check-in Flow Testing</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="qr-test-section">
+        <h3>Step 1: Get QR Token</h3>
+        <div class="input-group">
+          <label for="jobsiteId">Jobsite ID:</label>
+          <input type="number" id="jobsiteId" [(ngModel)]="qrCodeTestJobsiteId" min="1">
+        </div>
+        <button mat-raised-button color="primary" (click)="getQrToken()" [disabled]="loadingQrToken">
+          Get QR Token
+        </button>
+        <div *ngIf="loadingQrToken">
+          <mat-spinner diameter="24"></mat-spinner>
+        </div>
+        <div *ngIf="qrToken" class="token-display">
+          <p><strong>QR Token:</strong> {{ qrToken }}</p>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="qr-test-section">
+        <h3>Step 2: Test Check-in Flow</h3>
+        <p>Click on any step to test that specific part of the flow:</p>
+        
+        <div class="flow-buttons">
+          <button mat-raised-button color="accent" (click)="goToQrScanResult()" [disabled]="!qrToken">
+            1. QR Scan Result
+          </button>
+          <button mat-raised-button color="accent" (click)="goToCheckInType()">
+            2. Visitor/Contractor Selection
+          </button>
+          <button mat-raised-button color="accent" (click)="goToContractorInduction()">
+            3. Contractor Induction
+          </button>
+          <button mat-raised-button color="accent" (click)="goToCheckInForm()">
+            4. Check-in Form
+          </button>
+          <button mat-raised-button color="accent" (click)="goToCheckInInstructions()">
+            5. Instructions
+          </button>
+          <button mat-raised-button color="accent" (click)="goToCheckInConfirmation()">
+            6. Confirmation
+          </button>
+        </div>
+        
+        <button mat-button color="warn" (click)="clearSessionStorage()">
+          Clear Session Storage
+        </button>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="qr-test-section">
+        <h3>Verify QR Token (API Test)</h3>
+        <button mat-raised-button (click)="verifyQrToken()" [disabled]="!qrToken">
+          Verify QR Token
+        </button>
+        <div *ngIf="qrVerifyResult">
+          <pre>{{ qrVerifyResult | json }}</pre>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="test-card">
+    <mat-card-header>
+      <mat-card-title>API Testing</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div>
+        <button mat-raised-button (click)="callTestApi()">Test API</button>
+        <div *ngIf="loading">
+          <mat-spinner diameter="24"></mat-spinner>
+        </div>
+        <div *ngIf="result">
+          <pre>{{ result | json }}</pre>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div>
+        <button mat-raised-button (click)="callAuthMeApi()">Get Auth Me</button>
+        <div *ngIf="loadingAuthMe">
+          <mat-spinner diameter="24"></mat-spinner>
+        </div>
+        <div *ngIf="authMeResult">
+          <pre>{{ authMeResult | json }}</pre>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div>
+        <button mat-raised-button (click)="callCurrentCompanyApi()" [disabled]="loadingCurrentCompany">
+          Get Current Company
+        </button>
+        <div *ngIf="loadingCurrentCompany">
+          <mat-spinner diameter="24"></mat-spinner>
+        </div>
+        <div *ngIf="currentCompanyResult">
+          <pre>{{ currentCompanyResult | json }}</pre>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<style>
+  .test-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .test-card {
+    margin-bottom: 20px;
+  }
+  
+  .qr-test-section {
+    margin: 20px 0;
+  }
+  
+  .flow-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .token-display {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+  }
+  
+  .input-group {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  mat-divider {
+    margin: 20px 0;
+  }
+  
+  pre {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 4px;
+    overflow: auto;
+    max-height: 200px;
+  }
+</style>

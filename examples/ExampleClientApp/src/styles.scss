@@ -1,0 +1,32 @@
+/* You can add global styles to this file, and also import other style files */
+@import './styles/tables.scss';
+@import 'styles/theme.scss';
+@import 'styles/variables.scss';
+@import 'styles/utilities.scss';
+@import 'styles/components.scss';
+
+/* Leaflet map styles */
+@import 'leaflet/dist/leaflet.css';
+
+/* Additional Leaflet fixes */
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+}
+
+.leaflet-control-container .leaflet-control {
+  z-index: 1000;
+}
+
+.leaflet-pane {
+  z-index: 1;
+}
+
+.leaflet-top, .leaflet-bottom {
+  z-index: 1000;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// ... existing code ...

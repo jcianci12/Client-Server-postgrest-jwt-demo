@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setting Username to Email on Enrollment in Authentik</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #e94e1b;
+            border-bottom: 2px solid #e94e1b;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #e94e1b;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #444;
+            margin-top: 25px;
+        }
+        code {
+            background-color: #f5f5f5;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .note {
+            background-color: #fff8dc;
+            border-left: 4px solid #ffeb3b;
+            padding: 10px 15px;
+            margin: 20px 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        ol, ul {
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .header-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header-logo img {
+            max-width: 200px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-logo">
+        <img src="https://goauthentik.io/img/icon.svg" alt="Authentik Logo">
+    </div>
+
+    <h1>Setting Username to Email on Enrollment in Authentik</h1>
+
+    <h2>Introduction</h2>
+    <p>
+        Authentik is a powerful identity provider that offers flexible authentication flows for various applications. 
+        One common requirement when integrating with external identity providers like Google is to automatically set 
+        a user's username to their email address during enrollment. This approach simplifies the user experience and 
+        prevents redirection issues that can occur when users are prompted to manually enter a username.
+    </p>
+    <p>
+        This article will guide you through the process of configuring Authentik to automatically set a user's 
+        username to their email address during the enrollment process, particularly when using social providers like Google.
+    </p>
+
+    <h2>Why Set Username to Email?</h2>
+    <p>There are several benefits to automatically setting the username to the user's email address:</p>
+    <ol>
+        <li><strong>Simplified User Experience</strong>: Users don't need to create and remember a separate username.</li>
+        <li><strong>Reduced Friction</strong>: Eliminates an extra step in the enrollment process.</li>
+        <li><strong>Prevents Redirection Issues</strong>: Maintains the redirect context throughout the authentication flow.</li>
+        <li><strong>Ensures Uniqueness</strong>: Email addresses are already unique, making them ideal username candidates.</li>
+    </ol>
+
+    <h2>Prerequisites</h2>
+    <p>Before implementing this solution, ensure you have:</p>
+    <ul>
+        <li>Administrative access to your Authentik instance</li>
+        <li>A configured OAuth2/OIDC provider (like Google)</li>
+        <li>A basic understanding of Authentik flows and policies</li>
+    </ul>
+
+    <h2>Implementation Steps</h2>
+
+    <h3>Step 1: Create an Expression Policy</h3>
+    <p>First, we'll create an Expression Policy that will set the username to the email address:</p>
+    <ol>
+        <li>Navigate to <strong>Customisation → Policies</strong></li>
+        <li>Click <strong>Create</strong></li>
+        <li>Select <strong>Expression Policy</strong></li>
+        <li>Configure the policy with the following settings:
+            <ul>
+                <li><strong>Name</strong>: Set Username to Email</li>
+                <li><strong>Expression</strong>:
+                    <pre>request.context["prompt_data"]["username"] = request.context["prompt_data"]["email"]
+return True</pre>
+                </li>
+            </ul>
+        </li>
+        <li>Click <strong>Create</strong></li>
+    </ol>
+    <p>
+        This policy takes the email address from the <code>prompt_data</code> context and assigns it to the username field in the same context.
+    </p>
+
+    <h3>Step 2: Bind the Policy to the Enrollment Flow</h3>
+    <p>Next, we'll bind this policy to the enrollment flow's prompt stage:</p>
+    <ol>
+        <li>Navigate to <strong>Flows & Stages → Flows</strong></li>
+        <li>Find and click on your enrollment flow (typically <code>default-source-enrollment</code>)</li>
+        <li>Click on the <strong>Stage Bindings</strong> tab</li>
+        <li>Locate the prompt stage (typically <code>default-source-enrollment-prompt</code>)</li>
+        <li>Click the expand arrow (>) next to the prompt stage</li>
+        <li>Click <strong>Bind existing Policy / Group / User</strong></li>
+        <li>Select the <strong>Policy</strong> tab</li>
+        <li>Choose the "Set Username to Email" policy you created earlier</li>
+        <li>Configure the binding:
+            <ul>
+                <li><strong>Enabled</strong>: Yes</li>
+                <li><strong>Order</strong>: -1 (to ensure it runs before other policies)</li>
+                <li><strong>Timeout</strong>: 30 (default is fine)</li>
+                <li><strong>Failure result</strong>: Don't pass</li>
+            </ul>
+        </li>
+        <li>Click <strong>Create</strong></li>
+    </ol>
+
+    <h3>Step 3: Configure the Prompt Stage (Optional)</h3>
+    <p>You may want to configure the prompt stage to ensure a smooth user experience:</p>
+    <ol>
+        <li>From the Stage Bindings screen, click <strong>Edit Stage</strong> for the prompt stage</li>
+        <li>Ensure the username field is configured correctly</li>
+        <li>Consider disabling validation for the username field if you want to allow any email format</li>
+    </ol>
+
+    <h3>Step 4: Test the Flow</h3>
+    <p>To verify your configuration:</p>
+    <ol>
+        <li>Open an incognito/private browser window</li>
+        <li>Navigate to your application's login page</li>
+        <li>Select the social login option (e.g., Google)</li>
+        <li>Complete the authentication with the external provider</li>
+        <li>When redirected to the enrollment form, verify that the username field is automatically filled with the email address</li>
+        <li>Complete the enrollment process</li>
+        <li>Verify that you're correctly redirected back to your application</li>
+    </ol>
+
+    <h2>Troubleshooting</h2>
+    <p>If you encounter issues with this implementation, consider the following troubleshooting steps:</p>
+
+    <h3>Username Not Being Set</h3>
+    <ul>
+        <li>Verify that the expression policy is correctly bound to the prompt stage</li>
+        <li>Check that the policy order ensures it runs before other policies</li>
+        <li>Add debug statements to your expression policy:
+            <pre>print("Email in prompt_data:", request.context["prompt_data"].get("email"))
+request.context["prompt_data"]["username"] = request.context["prompt_data"]["email"]
+print("Username set to:", request.context["prompt_data"].get("username"))
+return True</pre>
+        </li>
+    </ul>
+
+    <h3>Redirection Issues</h3>
+    <p>If you're still experiencing redirection issues after enrollment:</p>
+    <ol>
+        <li>Create a debug policy to track the redirect URL:
+            <pre>print("Redirect URL:", context.get("redirect"))
+return True</pre>
+        </li>
+        <li>Bind this policy to various stages in your flow to see where the redirect URL might be getting lost</li>
+        <li>Check your OAuth2 provider configuration to ensure redirect URIs are correctly set</li>
+    </ol>
+
+    <h3>Flow Denial Errors</h3>
+    <p>If you see "Request has been denied" or "Flow does not apply to current user" errors:</p>
+    <ol>
+        <li>Check application permissions to ensure the user has access</li>
+        <li>Verify that all policy bindings in the flow are correctly configured</li>
+        <li>Look for any template variables in the flow that might not be properly populated</li>
+    </ol>
+
+    <h2>Advanced Configuration</h2>
+
+    <h3>Customizing the Username Format</h3>
+    <p>You might want to use only part of the email as the username. Modify your expression policy like this:</p>
+    <pre># Get email from prompt_data
+email = request.context["prompt_data"].get("email", "")
+
+# Use only the part before @ as username
+if "@" in email:
+    username = email.split("@")[0]
+else:
+    username = email
+
+request.context["prompt_data"]["username"] = username
+return True</pre>
+
+    <h3>Adding Security Enhancements</h3>
+    <p>For enhanced security, consider these additional configurations:</p>
+    <ol>
+        <li><strong>Disable Username and Password Editing</strong>:
+            <ul>
+                <li>Navigate to User Settings in Authentik</li>
+                <li>Disable the ability for users to change their username and password</li>
+            </ul>
+        </li>
+        <li><strong>Remove Local Password Authentication</strong>:
+            <ul>
+                <li>If you want users to authenticate exclusively through social providers</li>
+                <li>Remove the password change option from user settings</li>
+            </ul>
+        </li>
+        <li><strong>Add Multi-Factor Authentication</strong>:
+            <ul>
+                <li>Configure TOTP or other MFA methods for additional security</li>
+                <li>Add MFA stages to your authentication flows</li>
+            </ul>
+        </li>
+    </ol>
+
+    <div class="note">
+        <p><strong>Note:</strong> When using social providers exclusively, consider disabling local password authentication to ensure that if a user's social account is deactivated, they cannot bypass this by using local credentials.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>
+        Automatically setting the username to the user's email address during enrollment in Authentik streamlines the user experience and prevents common redirection issues. By using expression policies and properly configuring flow bindings, you can create a seamless authentication process that maintains context throughout the entire flow.
+    </p>
+    <p>
+        This approach is particularly valuable when integrating with social identity providers like Google, as it eliminates manual username entry while preserving the authentication context needed for proper redirection back to your application.
+    </p>
+    <p>
+        Remember to thoroughly test your configuration with new users and different scenarios to ensure a smooth authentication experience for all users.
+    </p>
+
+    <footer style="margin-top: 50px; border-top: 1px solid #ddd; padding-top: 20px; text-align: center; color: #777;">
+        <p>Last updated: <span id="current-date"></span></p>
+        <script>
+            document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+        </script>
+    </footer>
+</body>
+</html> 

@@ -1,0 +1,47 @@
+version: '3'
+services:
+  jwt-middleware:
+    build: ./jwt-middleware
+    ports:
+      - "8000:8000"
+    environment:
+      POSTGREST_URL: "http://server:3000"
+      PGRST_JWT_SECRET: "your_jwt_secret_here"
+      AUTHENTIK_URL: "https://your-oauth-provider.com"
+    volumes:
+      - ./jwt-middleware/app:/app
+    depends_on:
+      - server
+  server:
+    image: postgrest/postgrest
+    ports:
+      - "3000:3000"
+    environment:
+      PGRST_DB_URI: postgres://authenticator:mysecretpassword@db:5432/postgres
+      PGRST_DB_SCHEMA: api
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: "your_jwt_secret_here"
+      PGRST_JWT_SECRET_IS_BASE64: "false"
+      PGRST_JWT_AUD: "demo_app"
+      PGRST_LOG_LEVEL: debug
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data: 

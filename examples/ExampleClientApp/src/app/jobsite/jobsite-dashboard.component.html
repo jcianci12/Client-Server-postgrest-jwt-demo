@@ -1,0 +1,8 @@
+<mat-form-field>
+  <mat-label>Status Filter</mat-label>
+  <mat-select multiple [value]="selectedStatuses" (selectionChange)="onStatusFilterChange($event)">
+    <mat-option value="active">Active</mat-option>
+    <mat-option value="inactive">Inactive</mat-option>
+    <mat-option value="completed">Completed</mat-option>
+  </mat-select>
+</mat-form-field>

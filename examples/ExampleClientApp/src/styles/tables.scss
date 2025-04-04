@@ -1,0 +1,82 @@
+// Common table styles for the application
+.table-container {
+  margin: 20px;
+  overflow-x: auto;
+}
+
+// Table base styles
+.mat-mdc-table {
+  width: 100%;
+  background: var(--mat-table-background-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+// Row styles
+.mat-mdc-row {
+  .mat-mdc-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+  }
+
+  &:hover {
+    .mat-mdc-cell {
+      border-color: currentColor;
+      background-color: var(--mat-table-row-hover-state-layer-color, rgba(0, 0, 0, 0.04));
+    }
+  }
+}
+
+// Header styles
+.mat-mdc-header-row {
+  background-color: var(--mat-table-header-background-color, rgba(0, 0, 0, 0.02));
+}
+
+.mat-mdc-header-cell {
+  font-weight: 500;
+  color: var(--mat-table-header-text-color);
+}
+
+// Cell styles
+.mat-mdc-cell, .mat-mdc-header-cell {
+  padding: 16px;
+}
+
+// Actions column
+.mat-column-actions {
+  width: 120px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+// Full width utility
+.full-width {
+  width: 100%;
+}
+
+// Card header actions
+.header-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+// Card header layout
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+// Responsive styles
+@media (max-width: 600px) {
+  .table-container {
+    margin: 8px;
+  }
+
+  .mat-mdc-cell, .mat-mdc-header-cell {
+    padding: 12px 8px;
+  }
+} 

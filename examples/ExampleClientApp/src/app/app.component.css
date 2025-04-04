@@ -1,0 +1,12 @@
+.colourfulbackground {
+    opacity: 1;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+}
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 50px;
+    width: 100%;
+    text-align: center;
+   
+  }
