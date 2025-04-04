@@ -13,6 +13,29 @@ The project consists of three main components:
 2. **JWT Middleware**: Transforms OAuth2 tokens for PostgREST compatibility
 3. **Backend (PostgreSQL + PostgREST)**: Implements RLS policies
 
+## Why Token Transformation is Required
+🍒 The JWT middleware performs a crucial role in bridging the gap between OAuth2 and PostgREST authentication systems:
+
+1. **Format Compatibility**: 
+   - OAuth2 providers typically issue tokens in their own format
+   - PostgREST requires specific JWT claims and structure
+   - The middleware transforms tokens to match PostgREST's expected format
+
+2. **Security Context**:
+   - OAuth2 tokens contain user identity and scope information
+   - PostgREST needs this information in a specific format for RLS policies
+   - The transformation ensures proper mapping of user roles and permissions
+
+3. **Claims Standardization**:
+   - Different OAuth2 providers use different claim names
+   - PostgREST expects standardized claim names (e.g., `role`, `sub`)
+   - The middleware normalizes these claims for consistent processing
+
+4. **Token Validation**:
+   - Ensures tokens are properly signed and not expired
+   - Validates required claims are present
+   - Adds additional security checks before forwarding to PostgREST
+
 ## Project Structure
 ```
 ├── docs/           # Documentation and tutorials
